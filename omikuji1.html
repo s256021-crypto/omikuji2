@@ -91,6 +91,8 @@
     const resetBtn = document.getElementById('reset-btn');
 
     function drawOmikuji() {
+      // 二重実行防止ガード: 既に無効化されていれば何もしない
+      if (drawBtn && drawBtn.disabled) return;
       const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
       const message = messagesByFortune[fortune] || "良い一日をお過ごしください。";
       const resultDiv = document.getElementById("omikuji-result");
