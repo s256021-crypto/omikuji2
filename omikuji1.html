@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>恋御籤</title>
+  <style>
+    body {
+      background-color: #fdf5e6;
+      font-family: "Hiragino Mincho ProN", "MS PMincho", serif;
+      text-align: center;
+      padding-top: 50px;
+      color: #333;
+    }
+
+    .omikuji-box {
+      background-color: #fff8dc;
+      padding: 30px;
+      border: 5px double #b22222;
+      border-radius: 10px;
+      width: 320px;
+      margin: auto;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #b22222;
+      border-bottom: 2px solid #b22222;
+      padding-bottom: 10px;
+    }
+
+    #omikuji-result {
+      min-height: 120px;
+      margin-top: 20px;
+    }
+
+    button {
+      background-color: #b22222;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #8b0000;
+    }
+
+    .fortune {
+      font-size: 2em;
+      font-weight: bold;
+      color: #d4af37;
+      margin: 0;
+    }
+
+    .message {
+      font-size: 1em;
+      color: #333;
+      margin-top: 10px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <div class="omikuji-box">
+    <h2>恋御籤</h2>
+    <div id="omikuji-result">
+      <p>あなたの運勢を占います</p>
+    </div>
+    <button onclick="drawOmikuji()">おみくじを引く</button>
+  </div>
+
+  <script>
+    const fortunes = ["大吉", "吉", "中吉", "末吉", "凶", "大凶"];
+
+    const loveMessages = [
+      "誠意を持って接すれば、思いは通じます。",
+      "新しい出会いがすぐそばにあります。",
+      "焦らず、自分磨きに専念しましょう。",
+      "今は静かに待つのが吉。無理な行動は控えて。",
+      "相手の気持ちを尊重することを忘れずに。",
+      "過去の執着を捨てると、新しい運気が入ってきます。"
+    ];
+
+    function drawOmikuji() {
+      const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+      const message = loveMessages[Math.floor(Math.random() * loveMessages.length)];
+      const resultDiv = document.getElementById("omikuji-result");
+
+      resultDiv.innerHTML = `
+        <p class="fortune">${fortune}</p>
+        <p class="message">${message}</p>
+      `;
+    }
+  </script>
+</body>
+</html>
