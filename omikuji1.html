@@ -70,7 +70,7 @@
     <div id="omikuji-result">
       <p>あなたの運勢を占います</p>
     </div>
-    <button onclick="drawOmikuji()">おみくじを引く</button>
+    <button id="draw-button" onclick="drawOmikuji()">おみくじを引く</button>
   </div>
 
   <script>
@@ -89,11 +89,17 @@
       const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
       const message = loveMessages[Math.floor(Math.random() * loveMessages.length)];
       const resultDiv = document.getElementById("omikuji-result");
+      const drawButton = document.getElementById("draw-button");
 
       resultDiv.innerHTML = `
         <p class="fortune">${fortune}</p>
         <p class="message">${message}</p>
       `;
+
+      drawButton.disabled = true;
+      drawButton.textContent = "おみくじは引かれました";
+      drawButton.style.cursor = "not-allowed";
+      drawButton.style.opacity = "0.7";
     }
   </script>
 </body>
