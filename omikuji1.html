@@ -85,22 +85,55 @@
       "過去の執着を捨てると、新しい運気が入ってきます。"
     ];
 
-    function drawOmikuji() {
-      const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
-      const message = loveMessages[Math.floor(Math.random() * loveMessages.length)];
-      const resultDiv = document.getElementById("omikuji-result");
-      const drawButton = document.getElementById("draw-button");
+    function disableButton(btn) {
+      btn.disabled = true;
+      btn.textContent = "おみくじは引かれました";
+      btn.style.cursor = "not-allowed";
+      btn.style.opacity = "0.7";
+    }
 
+    function renderResult(fortune, message) {
+      const resultDiv = document.getElementById("omikuji-result");
       resultDiv.innerHTML = `
         <p class="fortune">${fortune}</p>
         <p class="message">${message}</p>
       `;
-
-      drawButton.disabled = true;
-      drawButton.textContent = "おみくじは引かれました";
-      drawButton.style.cursor = "not-allowed";
-      drawButton.style.opacity = "0.7";
     }
+
+    function drawOmikuji() {
+      const drawButton = document.getElementById("draw-button");
+      if (drawButton.disabled) return; // 二重実行防止
+
+      const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+      const message = loveMessages[Math.floor(Math.random() * loveMessages.length)];
+
+      renderResult(fortune, message);
+      disableButton(drawButton);
+
+      // localStorage に保存して、リロードしても再度引けないようにする
+      try {
+        localStorage.setItem("omikuji_drawn", "true");
+        localStorage.setItem("omikuji_fortune", fortune);
+        localStorage.setItem("omikuji_message", message);
+      } catch (e) {
+        // localStorage が使えない環境では無視
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const drawButton = document.getElementById("draw-button");
+      try {
+        const drawn = localStorage.getItem("omikuji_drawn");
+        if (drawn) {
+          const fortune = localStorage.getItem("omikuji_fortune") || "—";
+          const message = localStorage.getItem("omikuji_message") || "";
+          renderResult(fortune, message);
+          disableButton(drawButton);
+        }
+      } catch (e) {
+        // localStorage が使えない場合は何もしない
+      }
+    });
   </script>
 </body>
 </html>
