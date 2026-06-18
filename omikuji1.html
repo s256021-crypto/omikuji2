@@ -70,7 +70,8 @@
     <div id="omikuji-result">
       <p>あなたの運勢を占います</p>
     </div>
-    <button onclick="drawOmikuji()">おみくじを引く</button>
+    <button id="draw-btn" onclick="drawOmikuji()">おみくじを引く</button>
+    <button id="reset-btn" onclick="resetOmikuji()" style="display:none; margin-left:8px; background-color:#555;">リセット</button>
   </div>
 
   <script>
@@ -86,6 +87,9 @@
       "大凶": "過去の執着を捨てると、新しい運気が入ってきます。"
     };
 
+    const drawBtn = document.getElementById('draw-btn');
+    const resetBtn = document.getElementById('reset-btn');
+
     function drawOmikuji() {
       const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
       const message = messagesByFortune[fortune] || "良い一日をお過ごしください。";
@@ -95,6 +99,27 @@
         <p class="fortune">${fortune}</p>
         <p class="message">${message}</p>
       `;
+
+      // 再抽選を防ぐ
+      if (drawBtn) {
+        drawBtn.disabled = true;
+        drawBtn.style.opacity = '0.6';
+      }
+      if (resetBtn) {
+        resetBtn.style.display = 'inline-block';
+      }
+    }
+
+    function resetOmikuji() {
+      const resultDiv = document.getElementById("omikuji-result");
+      resultDiv.innerHTML = `<p>あなたの運勢を占います</p>`;
+      if (drawBtn) {
+        drawBtn.disabled = false;
+        drawBtn.style.opacity = '';
+      }
+      if (resetBtn) {
+        resetBtn.style.display = 'none';
+      }
     }
   </script>
 </body>
