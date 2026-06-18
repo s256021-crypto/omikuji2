@@ -70,70 +70,32 @@
     <div id="omikuji-result">
       <p>あなたの運勢を占います</p>
     </div>
-    <button id="draw-button" onclick="drawOmikuji()">おみくじを引く</button>
+    <button onclick="drawOmikuji()">おみくじを引く</button>
   </div>
 
   <script>
     const fortunes = ["大吉", "吉", "中吉", "末吉", "凶", "大凶"];
 
-    const loveMessages = [
-      "誠意を持って接すれば、思いは通じます。",
-      "新しい出会いがすぐそばにあります。",
-      "焦らず、自分磨きに専念しましょう。",
-      "今は静かに待つのが吉。無理な行動は控えて。",
-      "相手の気持ちを尊重することを忘れずに。",
-      "過去の執着を捨てると、新しい運気が入ってきます。"
-    ];
+    // 運勢ごとに固定のメッセージを設定するマップ
+    const messagesByFortune = {
+      "大吉": "この文章",
+      "吉": "誠意を持って接すれば、思いは通じます。",
+      "中吉": "焦らず、自分磨きに専念しましょう。",
+      "末吉": "今は静かに待つのが吉。無理な行動は控えて。",
+      "凶": "相手の気持ちを尊重することを忘れずに。",
+      "大凶": "過去の執着を捨てると、新しい運気が入ってきます。"
+    };
 
-    function disableButton(btn) {
-      btn.disabled = true;
-      btn.textContent = "おみくじは引かれました";
-      btn.style.cursor = "not-allowed";
-      btn.style.opacity = "0.7";
-    }
-
-    function renderResult(fortune, message) {
+    function drawOmikuji() {
+      const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+      const message = messagesByFortune[fortune] || "良い一日をお過ごしください。";
       const resultDiv = document.getElementById("omikuji-result");
+
       resultDiv.innerHTML = `
         <p class="fortune">${fortune}</p>
         <p class="message">${message}</p>
       `;
     }
-
-    function drawOmikuji() {
-      const drawButton = document.getElementById("draw-button");
-      if (drawButton.disabled) return; // 二重実行防止
-
-      const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
-      const message = loveMessages[Math.floor(Math.random() * loveMessages.length)];
-
-      renderResult(fortune, message);
-      disableButton(drawButton);
-
-      // localStorage に保存して、リロードしても再度引けないようにする
-      try {
-        localStorage.setItem("omikuji_drawn", "true");
-        localStorage.setItem("omikuji_fortune", fortune);
-        localStorage.setItem("omikuji_message", message);
-      } catch (e) {
-        // localStorage が使えない環境では無視
-      }
-    }
-
-    window.addEventListener("DOMContentLoaded", () => {
-      const drawButton = document.getElementById("draw-button");
-      try {
-        const drawn = localStorage.getItem("omikuji_drawn");
-        if (drawn) {
-          const fortune = localStorage.getItem("omikuji_fortune") || "—";
-          const message = localStorage.getItem("omikuji_message") || "";
-          renderResult(fortune, message);
-          disableButton(drawButton);
-        }
-      } catch (e) {
-        // localStorage が使えない場合は何もしない
-      }
-    });
   </script>
 </body>
 </html>
