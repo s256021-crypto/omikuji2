@@ -7,55 +7,60 @@ html_code = """
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>恋御籤</title>
+  <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap" rel="stylesheet">
   <style>
     body {
-      background-color: #fdf5e6;
-      font-family: "Hiragino Mincho ProN", "MS PMincho", serif;
+      background-color: #fcf0f0; /* Softer, slightly pinkish background */
+      font-family: 'Mochiy Pop P One', cursive; /* Apply the new cute font */
       text-align: center;
       padding-top: 50px;
       color: #333;
     }
 
     .omikuji-box {
-      background-color: #fff8dc;
+      background-color: #ffffff; /* White background for the box */
       padding: 30px;
-      border: 5px double #b22222;
-      border-radius: 10px;
+      border: 2px dashed #ffb6c1; /* Lighter, dashed pink border */
+      border-radius: 25px; /* More rounded corners */
       width: 320px;
       margin: auto;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 16px rgba(255, 182, 193, 0.3); /* Softer, pink-tinted shadow */
+      text-align: center; /* Add this to center the text */
     }
 
     h2 {
-      color: #b22222;
-      border-bottom: 2px solid #b22222;
+      color: #ef5350; /* Softer red for the title */
+      border-bottom: 2px dotted #ef5350; /* Dotted bottom border for title */
       padding-bottom: 10px;
     }
 
     #omikuji-result {
       min-height: 120px;
       margin-top: 20px;
+      opacity: 0; /* 初期状態では非表示 */
+      animation-fill-mode: forwards; /* アニメーション終了時のスタイルを保持 */
     }
 
     button {
-      background-color: #b22222;
+      background-color: #ff8a80; /* Softer coral for the button */
       color: white;
       border: none;
       padding: 10px 20px;
       font-size: 1em;
       cursor: pointer;
-      border-radius: 5px;
+      border-radius: 15px; /* More rounded button */
       margin-top: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle button shadow */
     }
 
     button:hover {
-      background-color: #8b0000;
+      background-color: #ff5252; /* Slightly darker coral on hover */
     }
 
     .fortune {
       font-size: 2em;
       font-weight: bold;
-      color: #d4af37;
+      color: #ffb6c1; /* Light pink for fortune text */
       margin: 0;
     }
 
@@ -63,7 +68,17 @@ html_code = """
       font-size: 1em;
       color: #333;
       margin-top: 10px;
-      text-align: left;
+      text-align: center; /* Also center the message text */
+    }
+
+    /* フェードインアニメーション */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.8s ease-out forwards;
     }
   </style>
 </head>
@@ -79,7 +94,6 @@ html_code = """
   <script>
     const fortunes = ["大吉", "大凶"];
 
-    // 運勢ごとに5種類のメッセージを設定するマップ
     const messagesByFortune = {
       "大吉": [
         "一回のいただきますより一回のご馳走様でした",
@@ -121,20 +135,24 @@ html_code = """
     const drawBtn = document.getElementById('draw-btn');
 
     function drawOmikuji() {
-      // 二重実行防止ガード: 既に無効化されていれば何もしない
       if (drawBtn && drawBtn.disabled) return;
       const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
-      // 運勢に対応するメッセージ配列からランダムに選択
       const messages = messagesByFortune[fortune] || ["良い一日をお過ごしください。"];
       const message = messages[Math.floor(Math.random() * messages.length)];
       const resultDiv = document.getElementById("omikuji-result");
+
+      // アニメーションをリセットするためにクラスを一度削除してから追加
+      resultDiv.classList.remove('fade-in');
+      // DOMの再描画を強制するための小技（setTimeoutなどでも可）
+      void resultDiv.offsetWidth;
 
       resultDiv.innerHTML = `
         <p class="fortune">${fortune}</p>
         <p class="message">${message}</p>
       `;
 
-      // 再抽選を防ぐ
+      resultDiv.classList.add('fade-in'); // フェードインアニメーションを適用
+
       if (drawBtn) {
         drawBtn.disabled = true;
         drawBtn.style.opacity = '0.6';
